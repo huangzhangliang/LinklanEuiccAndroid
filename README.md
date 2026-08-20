@@ -1,6 +1,6 @@
 # LinklanLPA Android SDK 对接文档
 
-**SDK 版本：1.0.9**
+**SDK 版本：1.0.11**
 
 **包名：`com.linklan.euicc`**
 
@@ -89,7 +89,7 @@ repositories {
 // build.gradle.kts (app)
 dependencies {
     // Kotlin 协程（SDK 依赖）
-    implementation("com.github.huangzhangliang:LinklanEuiccAndroid:1.0.9")
+    implementation("com.github.huangzhangliang:LinklanEuiccAndroid:1.0.11")
 
 
     implementation("io.grpc:grpc-okhttp:1.64.0")

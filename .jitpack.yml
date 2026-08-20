@@ -5,4 +5,4 @@ before_install:
   - chmod +x gradlew
 
 install:
-  - ./gradlew publishToMavenLocal --no-daemon
+  - ./gradlew -Pgroup=$GROUP -Pversion=$VERSION publishToMavenLocal --no-daemon

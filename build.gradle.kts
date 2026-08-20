@@ -2,11 +2,10 @@ plugins {
     id("maven-publish")
 }
 
-// ===== 从 JitPack 传入的参数或环境变量获取 groupId / version =====
-// JitPack 传 -Pgroup=xxx -Pversion=xxx，同时设置 GROUP / VERSION 环境变量
+// ✅ 支持 JitPack 的 groupId
 val pubGroup = project.findProperty("group")?.toString()
     ?: System.getenv("GROUP")
-    ?: "com.github.huangzhangliang"
+    ?: "com.github.huangzhangliang"  // JitPack 格式
 
 val pubVersion = project.findProperty("version")?.toString()
     ?: System.getenv("VERSION")
@@ -16,16 +15,14 @@ println("Publishing: group=$pubGroup, version=$pubVersion")
 
 afterEvaluate {
     extensions.configure<PublishingExtension> {
-        // 遍历 libs/ 下的所有 AAR 文件，逐个发布为 Maven artifact
-        fileTree("libs").matching { include("*.aar") }.files.forEach { aarFile ->
-            // 从文件名提取 artifactId
-            // 例如: droidlib-linklan-release.aar -> droidlib-linklan-release
-            // 例如: droidlib-linklan-release-1.0.8.aar -> droidlib-linklan-release
-            var artifactName = aarFile.nameWithoutExtension
-            // 去掉可能的版本号后缀
-            artifactName = artifactName.replace(Regex("-\\d+\\.\\d+\\.\\d+$"), "")
+        // ✅ 添加 mavenLocal 仓库（JitPack 需要）
+        repositories {
+            mavenLocal()
+        }
 
-            println("Publication: $pubGroup:$artifactName:$pubVersion (from ${aarFile.name})")
+        fileTree("libs").matching { include("*.aar") }.files.forEach { aarFile ->
+            var artifactName = aarFile.nameWithoutExtension
+            artifactName = artifactName.replace(Regex("-\\d+\\.\\d+\\.\\d+$"), "")
 
             publications {
                 create<MavenPublication>(artifactName) {
@@ -43,6 +40,16 @@ afterEvaluate {
                                 name.set("MIT")
                                 url.set("https://opensource.org/licenses/MIT")
                             }
+                        }
+                        developers {
+                            developer {
+                                id.set("huangzhangliang")
+                                name.set("huangzhangliang")
+                                email.set("82770536@qq.com")
+                            }
+                        }
+                        scm {
+                            url.set("https://github.com/huangzhangliang/LinklanEuiccAndroid")
                         }
                     }
                 }

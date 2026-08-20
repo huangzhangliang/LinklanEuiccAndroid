@@ -1,0 +1,9 @@
+jdk:
+  - openjdk17
+
+before_install:
+  - chmod +x gradlew
+
+# 跳过 assemble，只执行 publishToMavenLocal
+install:
+  - ./gradlew publishToMavenLocal --no-daemon

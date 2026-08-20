@@ -1,33 +1,37 @@
 plugins {
-    id("maven-publish")    // 注意：不需要 android 插件，只做 AAR 发布
+    id("maven-publish")
 }
 
-// ===== 把 AAR 文件作为 Maven artifact 发布 =====
+// 从 JitPack 传入的参数获取，没有则用默认值
+val jitpackGroup = project.findProperty("group")?.toString() ?: "com.linklan"
+val jitpackVersion = project.findProperty("version")?.toString() ?: "1.0.8"
+
 afterEvaluate {
     extensions.configure<PublishingExtension> {
         fileTree("libs").matching { include("*.aar") }.files.forEach { aarFile ->
+            // 从文件名提取 artifactId
             val artifactName = aarFile.nameWithoutExtension
-                .removeSuffix("-1.0.8")   // 去掉版本号，得到 artifactId
+                .replace("-$jitpackVersion", "")
 
             publications {
                 create<MavenPublication>(artifactName) {
-                    groupId = "com.linklan"
-                    artifactId = artifactName
-                    version = "1.0.8"
+                    groupId = jitpackGroup                      // JitPack 传入 com.github.huangzhangliang
+                    artifactId = artifactName                    // droidlib-linklan-release 等
+                    version = jitpackVersion                     // JitPack 传入 1.0.2
                     artifact(aarFile)
 
                     pom {
                         name.set(artifactName)
-                        description.set("LinklanLPA eSIM SDK")
-                        url.set("https://github.com/huangzhangliang/LinklanEuiccAndroid")
-                        licenses {
-                            license {
-                                name.set("MIT")
-                                url.set("https://opensource.org/licenses/MIT")
-                            }
-                        }
+                        description.set("Linklan eSIM SDK")
                     }
                 }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "Local"
+                url = uri("${rootProject.buildDir}/repo")
             }
         }
     }

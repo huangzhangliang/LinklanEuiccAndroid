@@ -89,7 +89,7 @@ repositories {
 // build.gradle.kts (app)
 dependencies {
     // Kotlin 协程（SDK 依赖）
-    implementation("com.github.huangzhangliang:LinklanEuiccAndroid:1.0.20")
+    implementation("com.github.huangzhangliang:LinklanEuiccAndroid:1.1.5")
 
 
     implementation("io.grpc:grpc-okhttp:1.64.0")

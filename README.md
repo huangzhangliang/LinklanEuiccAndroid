@@ -1,6 +1,6 @@
 # LinklanLPA Android SDK 对接文档
 
-**SDK 版本：1.0.20**
+**SDK 版本：1.1.5**
 
 **包名：`com.linklan.euicc`**
 
